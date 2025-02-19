@@ -9,7 +9,7 @@ const items = ref([])
 
 
 const filters = reactive({
-    sortBy: '',
+    sortBy: 'title',
     searchQuery: '',
 })
 
@@ -18,28 +18,33 @@ const onChangeSelect = (event) => {
     filters.sortBy = event.target.value;
 }
 
-onMounted(async () => {
+const onChangeInput = (event) => {
+    filters.searchQuery = event.target.value;
+}
+
+const fetchItems = async () => {
     try{
-        const { data } = await axios.get('https://7046e39e8a82c704.mokky.dev/items')
+        const params = {
+            sortBy: filters.sortBy,
+        }
+
+        if (filters.searchQuery) {
+        params.title = `*${filters.searchQuery}*`;
+        }
+
+        const { data } = await axios.get('https://7046e39e8a82c704.mokky.dev/items',{params})
 
         items.value = data;
 
     }   catch(err) {
         console.log(err)
     }    
-})
+}
+
+onMounted(fetchItems)
 
 
-watch(filters, async () => {
-    try{
-        const { data } = await axios.get('https://7046e39e8a82c704.mokky.dev/items?sortBy=' + filters.sortBy )
-
-        items.value = data;
-
-    }   catch(err) {
-        console.log(err)
-    }    
-})
+watch(filters,fetchItems)
 </script>
 
 <template>
@@ -72,6 +77,7 @@ watch(filters, async () => {
                     <div class="relative">
                         <img class="absolute left-3 top-3" src="/search.svg" >
                         <input 
+                        @input="onChangeInput"
                         class="border border-gray-500 rounded-md py-1.5 pl-10 pr-4 outline-none focus:border-gray-400"
                         placeholder="Поиск...">
                     </div>
