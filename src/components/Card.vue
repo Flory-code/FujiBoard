@@ -1,14 +1,28 @@
 <script setup>
-defineProps({
+import {inject} from 'vue'
+const props = defineProps({
+    id:Number,
     imageUrl: String,
     title:String,
     price:Number,
     isFavorite:Boolean,
     isAdded:Boolean,
     onClickAdd: Function,
-    Favorite: Function
 
+    onClickFavorite: Function
+  
 })
+
+const addToFavorite = inject('addToFavorite')
+
+const onClickFavorite = () => {
+    const obj = {
+        ...props,
+        parentId: props.id
+    };
+
+    addToFavorite(obj);
+}
 </script>
 
 <template>
@@ -19,7 +33,7 @@ defineProps({
             
 
 
-            <img @click="Favorite" :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'" alt="like1" class="absolute top-8 left-8">
+            <img @click="onClickFavorite" :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'" alt="like1" class="absolute top-8 left-8">
 
             <img :src="imageUrl" alt="keyboard" class="">
             <p class="mt-2">{{ title }}</p>
