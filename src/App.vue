@@ -25,7 +25,7 @@ const onChangeInput = (event) => {
 const fetchFavorites = async () => {
     try{
 
-        const { data:favorites } = await axios.get('https://7046e39e8a82c704.mokky.dev/favorites')
+        const { data:favorites } = await axios.get(`https://7046e39e8a82c704.mokky.dev/favorites`)
 
         items.value = items.value.map(item => {
             const favorite = favorites.find(favorite => favorite.parentId === item.id)
@@ -37,7 +37,7 @@ const fetchFavorites = async () => {
             return{
                 ...item,
                 isFavorite:true,
-                favoriteId: favorite.id,
+                favoriteId: favorite.id
                 
             }
         })
@@ -50,10 +50,27 @@ const fetchFavorites = async () => {
 }
 
 const addToFavorite = async (item) => {
-    item.isFavorite = true
+    try {
+        if (!item.isFavorite) {
+            const obj = {
+                parentId: item.id
+            }
 
-    console.log(item)
+            item.isFavorite = true
 
+            const { data } = await axios.post(`https://7046e39e8a82c704.mokky.dev/favorites`, obj)
+            
+            
+            item.FavoriteId = data.id
+        }
+    else {
+        await axios.delete(`https://7046e39e8a82c704.mokky.dev/favorites/${item.FavoriteId}`)
+        item.isFavorite = false
+        item.isAdded = null
+    }
+    }  catch (err) {
+        console.log(err)
+    }
 }
 
 const fetchItems = async () => {
@@ -66,7 +83,7 @@ const fetchItems = async () => {
         params.title = `*${filters.searchQuery}*`;
         }
 
-        const { data } = await axios.get('https://7046e39e8a82c704.mokky.dev/items',{params})
+        const { data } = await axios.get(`https://7046e39e8a82c704.mokky.dev/items`,{params})
 
        
 
@@ -74,6 +91,7 @@ const fetchItems = async () => {
 
             ...obj,
             isFavorite: false,
+            isFavorite: null,
             isAdded: false
         }))
 
@@ -84,7 +102,7 @@ const fetchItems = async () => {
 }
 
 onMounted(async () => {
-    await fetchItems();
+    await fetchItems()
     await fetchFavorites()
 })
 
@@ -133,7 +151,7 @@ provide('addToFavorite', addToFavorite)
             </div>
 
 
-
+            
             <Cardlist :items="items"/>
         </div>
 

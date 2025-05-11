@@ -2,12 +2,10 @@
 import Card from './card.vue'
 
 defineProps({
-    items: Array
+    items: Array,
 })
 
-const onClickAdd = () => {
-    alert('Добавить');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-}
+const emit = defineEmits(['addToFavorite'])
 </script>
 
 <template>    
@@ -20,6 +18,7 @@ const onClickAdd = () => {
         :imageUrl="item.imageUrl" 
         :price="item.price"
         :onClickAdd="onClickAdd"
+        :onClickFavorite="() => emit('addToFavorite', item)"
         :isFavorite="item.isFavorite"
         />
 

@@ -17,7 +17,6 @@ const addToFavorite = inject('addToFavorite')
 
 const onClickFavorite = () => {
     const obj = {
-        ...props,
         parentId: props.id
     };
 
