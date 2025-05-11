@@ -1,9 +1,16 @@
 <script setup>
 import DrawerHead from './DrawerHead.vue';
 import CartItemList from './CartItemList.vue';
+
+const emit = defineEmits(['createOrder'])
+
+defineProps({
+    totalPrice: Number,
+    vatPrice: Number
+})
 </script>
 <template>
-    <div class="fixed top-0 left-0 h-full w-full bg-black z-10 bg-black opacity-95">
+    <div class="fixed top-0 left-0 h-full w-full bg-black z-10 bg-black/75 ">
 
         <div class="bg-white w-120 h-full fixed right-0 top-0 z-20 p-8">
             <DrawerHead/>
@@ -15,7 +22,7 @@ import CartItemList from './CartItemList.vue';
 
                     <span>Итого:</span>
                     <div class="flex-1 border-b border-dotted"></div>
-                    <b>12900 руб</b>
+                    <b>{{ totalPrice }} ₽</b>
                     
                 </div>
 
@@ -23,14 +30,15 @@ import CartItemList from './CartItemList.vue';
 
                     <span>Доставка:</span>
                     <div class="flex-1 border-b border-dotted"></div>
-                    <b>12900 руб</b>
+                    <b>{{ vatPrice }} ₽</b>
                     
                 </div>
             </div>
 
 
             <button
-            disabled="true"
+            :disabled="totalPrice ? false : true"
+            @click="() => emit('createOrder')"
             class="bg-lime-500
             w-full
             rounded-xl
@@ -40,7 +48,9 @@ import CartItemList from './CartItemList.vue';
             disabled:bg-slate-400
             hover:bg-lime-600
             hover:transition
-            active:bg-lime-700">Оформить заказ</button>
+            active:bg-lime-700">
+            Оформить заказ
+        </button>
             
         </div>
 
