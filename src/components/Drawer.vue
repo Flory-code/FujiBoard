@@ -1,13 +1,17 @@
 <script setup>
 import DrawerHead from './DrawerHead.vue';
 import CartItemList from './CartItemList.vue';
+import { computed } from 'vue';
 
 const emit = defineEmits(['createOrder'])
 
-defineProps({
+const props = defineProps({
     totalPrice: Number,
-    vatPrice: Number
+    vatPrice: Number,
+    buttonDisabled: Boolean
 })
+
+
 </script>
 <template>
     <div class="fixed top-0 left-0 h-full w-full bg-black z-10 bg-black/75 ">
@@ -37,7 +41,7 @@ defineProps({
 
 
             <button
-            :disabled="totalPrice ? false : true"
+            :disabled="buttonDisabled"
             @click="() => emit('createOrder')"
             class="bg-lime-500
             w-full

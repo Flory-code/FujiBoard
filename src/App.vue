@@ -4,9 +4,12 @@ import axios from 'axios'
 import Header from './components/Header.vue'
 import Cardlist from './components/Cardlist.vue'
 import Drawer from './components/Drawer.vue'
+import InfoBlock from './components/InfoBlock.vue'
+
 
 const items = ref([])
 const cart = ref([]) 
+const isCreatingOrder = ref(false)
 
 const drawerOpen = ref(false)
 
@@ -15,6 +18,10 @@ const totalPrice = computed(
 )
 
 const vatPrice = computed(() => Math.round((totalPrice.value * 5 ) / 100))
+
+const cartIsEmpty = computed(() => cart.value.length === 0)
+
+const cartButtonDisabled = computed(() => isCreatingOrder.value || cartIsEmpty.value)
 
 const closeDrawer = () => {
     drawerOpen.value = false
@@ -41,6 +48,7 @@ const removeFromCart = (item) => {
 
 const createOrder = async () => {
     try {
+        isCreatingOrder.value = true
         const { data } = await axios.post(`https://7046e39e8a82c704.mokky.dev/orders`, {
             items: cart.value,
             totalPrice: totalPrice.value,
@@ -51,6 +59,8 @@ const createOrder = async () => {
         return data;
     } catch(err){
         console.log(err)
+    } finally {
+        isCreatingOrder.value = false
     }
 }
 
@@ -60,7 +70,6 @@ const onClickAddPlus = (item) => {
     } else {
         removeFromCart(item)
     }
-
     console.log(cart)
 }
 
@@ -77,7 +86,7 @@ const onChangeInput = (event) => {
 
 const fetchFavorites = async () => {
     try{
-        const { data : favorites } = await axios.get
+        const { data : favorites } = await axios.get(`https://7046e39e8a82c704.mokky.dev/favorites`)
        
 
         items.value = items.value.map(item => {
@@ -157,6 +166,13 @@ onMounted(async () => {
 
 watch(filters,fetchItems)
 
+watch(cart, () => {
+    items.value = items.value.map((item) => ({
+        ...item,
+        isAdded: false
+    }))
+})
+
 provide('cart', {
     cart,
     closeDrawer,
@@ -169,7 +185,14 @@ provide('cart', {
 
 <template>
 
-   <Drawer v-if="drawerOpen" :total-price="totalPrice" :vat-price="vatPrice" @create-order="createOrder"/>
+   <Drawer v-if="drawerOpen" 
+   :total-price="totalPrice" 
+   :vat-price="vatPrice" 
+   @create-order="createOrder" 
+   :button-disabled="cartButtonDisabled"/>
+
+ <!--    <InfoBlock title="Корзина пустая" description="йоу" image-url="/package-icon.png"/>
+ -->
 
     <div panel-1-34
     class="
@@ -182,7 +205,7 @@ provide('cart', {
 
     ">
 
-        <Header :total-price="totalPrice" @open-Drawer="openDrawer" @create-order="createOrder"/>
+        <Header :total-price="totalPrice" @open-drawer="openDrawer" @create-order="createOrder"/>
         <div class="p-10">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-3xl font-bold">Весь товар</h2>
