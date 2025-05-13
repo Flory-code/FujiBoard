@@ -1,6 +1,7 @@
 <script setup>
 import DrawerHead from './DrawerHead.vue';
 import CartItemList from './CartItemList.vue';
+import InfoBlock from './InfoBlock.vue';
 import { computed } from 'vue';
 
 const emit = defineEmits(['createOrder'])
@@ -18,46 +19,61 @@ const props = defineProps({
 
         <div class="bg-white w-120 h-full fixed right-0 top-0 z-20 p-8">
             <DrawerHead/>
-            <CartItemList/>
-
-            <div class="flex flex-col gap-3 mb-5 my-7">
-
-                <div class="flex gap-1">
-
-                    <span>Итого:</span>
-                    <div class="flex-1 border-b border-dotted"></div>
-                    <b>{{ totalPrice }} ₽</b>
-                    
-                </div>
-
-                <div class="flex gap-1">
-
-                    <span>Доставка:</span>
-                    <div class="flex-1 border-b border-dotted"></div>
-                    <b>{{ vatPrice }} ₽</b>
-                    
-                </div>
+            
+            <div v-if="!totalPrice" class="flex h-full items-center">
+                <InfoBlock 
+                
+                title="Корзина пустая" 
+                description="йоу" 
+                image-url="/package-icon.png"
+                
+                />
             </div>
 
+            <div v-else>    
+            <CartItemList/>
 
-            <button
-            :disabled="buttonDisabled"
-            @click="() => emit('createOrder')"
-            class="bg-lime-500
-            w-full
-            rounded-xl
-            py-5
-            text-white
-            cursor-pointer
-            disabled:bg-slate-400
-            hover:bg-lime-600
-            hover:transition
-            active:bg-lime-700">
-            Оформить заказ
-        </button>
+            <div v-if="totalPrice">
+                <div class="flex flex-col gap-3 mb-5 my-7">
+
+                    <div class="flex gap-1">
+
+                        <span>Итого:</span>
+                        <div class="flex-1 border-b border-dotted"></div>
+                        <b>{{ totalPrice }} ₽</b>
+                        
+                    </div>
+
+                    <div class="flex gap-1">
+
+                        <span>Доставка:</span>
+                        <div class="flex-1 border-b border-dotted"></div>
+                        <b>{{ vatPrice }} ₽</b>
+                        
+                    </div>
+                </div>
             
+
+                <button
+                :disabled="buttonDisabled"
+                @click="() => emit('createOrder')"
+                class="bg-lime-500
+                w-full
+                rounded-xl
+                py-5
+                text-white
+                cursor-pointer
+                disabled:bg-slate-400
+                hover:bg-lime-600
+                hover:transition
+                active:bg-lime-700">
+                Оформить заказ
+                </button>
         </div>
 
+        </div>
+
+            </div>
     </div>
 </template>
 

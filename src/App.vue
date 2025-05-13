@@ -191,8 +191,7 @@ provide('cart', {
    @create-order="createOrder" 
    :button-disabled="cartButtonDisabled"/>
 
- <!--    <InfoBlock title="Корзина пустая" description="йоу" image-url="/package-icon.png"/>
- -->
+
 
     <div panel-1-34
     class="
