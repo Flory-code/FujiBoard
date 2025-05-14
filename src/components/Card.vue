@@ -10,7 +10,6 @@ defineProps({
     onClickFavorite: Function
 })
 
-
 </script>
 
 <template>
@@ -31,7 +30,7 @@ defineProps({
                 </div>
             
 
-            <img @click="onClickAdd" :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus">
+            <img  @click="onClickAdd" :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus">
             </div>
         </div>
 
