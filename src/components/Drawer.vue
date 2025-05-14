@@ -31,7 +31,7 @@ const props = defineProps({
             </div>
 
             <div v-else>    
-            <CartItemList/>
+            <CartItemList v-auto-animate/>
 
             <div v-if="totalPrice">
                 <div class="flex flex-col gap-3 mb-5 my-7">
