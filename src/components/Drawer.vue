@@ -93,16 +93,16 @@ const createOrder = async () => {
                 <button
                 :disabled="buttonDisabled"
                 @click="createOrder"
-                class="bg-lime-500
+                class="bg-red-500
                 w-full
                 rounded-xl
                 py-5
                 text-white
                 cursor-pointer
                 disabled:bg-slate-400
-                hover:bg-lime-600
+                hover:bg-red-600
                 hover:transition
-                active:bg-lime-700">
+                active:bg-red-700">
                 Оформить заказ
                 </button>
         </div>

@@ -1,5 +1,5 @@
 <script setup>
-import Card from './card.vue'
+import Card from './Card.vue'
 
 defineProps({
     items: Array,
